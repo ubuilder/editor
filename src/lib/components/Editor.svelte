@@ -1,6 +1,9 @@
 <script lang="ts">
   import { SvelteComponent, onMount } from "svelte";
   import WrapperProvider from "./WrapperProvider.svelte"
+  
+  export let page 
+  export let selectedComponent
   const componentsSelector = ".u-component"
   let components
   let editor
@@ -13,7 +16,7 @@
     onMount(()=>{
         components = document.querySelectorAll(componentsSelector)
         function handler(event: Event ){
-            targets.push(event?.target?.firstChild)
+            targets.push(event?.target)
             targets = targets
             event.preventDefault()
         }
@@ -30,7 +33,7 @@
 </script>
 <div bind:this = {editor} style = 'position:absolute;pointers-event:none;border: none; width: -moz-available'>
     <slot />
-    <WrapperProvider bind:editor  bind:this = {wrapperProvider} bind:target = {targets[targets.length - 1]} />
+    <WrapperProvider bind:selectedComponent bind:page bind:editor  bind:this = {wrapperProvider} bind:target = {targets[targets.length - 1]} />
 </div>
 
 
