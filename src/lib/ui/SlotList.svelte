@@ -1,5 +1,5 @@
 <script lang="ts">
-  import Sortable from "sortablejs";
+  import Sortable from 'sortablejs';
   import {
     ButtonList,
     modal,
@@ -19,32 +19,29 @@
     TabItem,
     CardBody,
     TabContent,
-    TabPanel,
-  } from "@ulibs/yesvelte";
-  import SlotModal from "./SlotModal.svelte";
-  import { onDestroy, onMount } from "svelte";
-  import { slots as slotsStore } from "$lib/stores/pageSlots";
-  import type { Component } from ".";
-  import ComponentProp from "./ComponentProp.svelte";
-	import { goto } from "$app/navigation"
+    TabPanel
+  } from '@ulibs/yesvelte';
+  import SlotModal from './SlotModal.svelte';
+  import { onDestroy, onMount } from 'svelte';
+  import { slots as slotsStore } from '$lib/stores/pageSlots';
+  import type { Component } from '.';
+  import ComponentProp from './ComponentProp.svelte';
 
-  export let buttonText: string = "Add Slot";
+  export let buttonText: string = 'Add Slot';
   export let allowedComponents: string[] = [];
   export let disabledComponents: string[] = [];
   export let componentId: string | undefined = undefined;
-
-  export let components: Component[] = []
+  export let components: Component[] = [];
   export let slotList: any[] = [];
-
-  export let id = "";
+  export let id = '';
   export let items: any = {};
-
+  
   let element: HTMLDivElement;
   let instance: Sortable;
 
   async function onRemoveSlot(index: number) {
     const choice = await confirmModal.open({
-      status: "danger",
+      status: 'danger'
     });
 
     if (choice) {
@@ -59,43 +56,41 @@
     toIndex: number;
   };
   function onMove(obj: MoveCustomeEvent): void {
-    let fromAdd = obj.from?.split("_") ?? [];
-    let toAdd = obj.to?.split("_") ?? [];
+    let fromAdd = obj.from?.split('_') ?? [];
+    let toAdd = obj.to?.split('_') ?? [];
     let from = $slotsStore;
     let to = $slotsStore;
     for (let i of fromAdd) {
-      if (i !== "") {
+      if (i !== '') {
         from = from[i].slot;
       }
     }
     for (let i of toAdd) {
-      if (i !== "") {
+      if (i !== '') {
         to = to[i].slot;
       }
     }
     const temp = JSON.stringify(from[obj.fromIndex]) as string;
-    from.splice(obj.fromIndex, 1);
+    from.splice(obj.fromIn1dex, 1);
     to.splice(obj.toIndex, 0, JSON.parse(temp));
     $slotsStore = $slotsStore;
   }
 
-  
-
   onMount(() => {
     instance = new Sortable(element, {
       animation: 150,
-      easing: "cubic-bezier(1, 0, 0, 1)",
-      draggable: ".sortable-item",
-      group: "nested",
+      easing: 'cubic-bezier(1, 0, 0, 1)',
+      draggable: '.sortable-item',
+      group: 'nested',
       onEnd: function (/**Event*/ evt) {
         console.log(evt);
         onMove({
           from: evt.from?.parentElement?.id,
           to: evt.to?.parentElement?.id,
           fromIndex: evt.oldIndex,
-          toIndex: evt.newIndex,
+          toIndex: evt.newIndex
         });
-      },
+      }
     });
   });
 
@@ -106,24 +101,24 @@
   });
 
   async function onAddSlot() {
-    console.log("onAddSlot");
+    console.log('onAddSlot');
 
     if (componentId) {
       const component = components.find((x) => x.id === componentId);
       if (component) {
         slotList = [...(slotList ?? []), { type: component.id, props: {} }];
       } else {
-        console.log("component not found...");
+        console.log('component not found...');
       }
     } else {
       const slot = await modal.open(SlotModal, {
         components,
         allowedComponents,
         disabledComponents,
-        mode: "add",
+        mode: 'add',
         slot: {
-          props: {},
-        },
+          props: {}
+        }
       });
       if (slot) {
         slotList = [...(slotList ?? []), slot];
@@ -132,16 +127,11 @@
   }
 </script>
 
-<Accordions id={id + "_"}>
+<Accordions id={id + '_'}>
   <div style="padding: 8px 0px" bind:this={element}>
     {#each slotList ?? [] as slot, index}
-      {@const component = components.find(x => x.id === slot.type)}
-      <Card
-        style="border: none;"
-        id={id + "_" + index}
-        class="page-slot sortable-item"
-        my="2"
-      >
+      {@const component = components.find((x) => x.id === slot.type)}
+      <Card style="border: none;" id={id + '_' + index} class="page-slot sortable-item" my="2">
         <Accordion>
           <AccordionHeader p="0">
             <El w="100" d="flex" alignItems="center" justifyContent="between">
@@ -149,12 +139,7 @@
                 {component?.name}
               </AccordionTitle>
               <ButtonList on:click>
-              
-                <Button
-                  ghost
-                  color="danger"
-                  on:click!stopPropagation={() => onRemoveSlot(index)}
-                >
+                <Button ghost color="danger" on:click!stopPropagation={() => onRemoveSlot(index)}>
                   <Icon name="trash" />
                 </Button>
               </ButtonList>

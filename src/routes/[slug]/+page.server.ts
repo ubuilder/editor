@@ -45,12 +45,10 @@ async function findPageBySlug({
   return { page: undefined, params: {} };
 }
 function render(page: Page, components: Component[], items: Items) {
-  function renderSlot(slot: any, items = {}) {
+  function renderSlot(slot: any, items = {}, index  = "") {
     const props: any = {};
     const component: Component | undefined = components.find((x) => x.id === slot.type);
-
     if (!component) return;
-
     let fields: ComponentField[] = [];
     if (Array.isArray(component.fields)) {
       fields = component.fields;
@@ -69,27 +67,37 @@ function render(page: Page, components: Component[], items: Items) {
 
           props[field.name] = '';
           for (let item of list) {
+
             props[field.name] += slot.props[field.name].props.slot
-              .map((x) => renderSlot(x, { ...items, [slot.props[field.name].props.item]: item }))
+              .map((x, i) => renderSlot(x, { ...items, [slot.props[field.name].props.item]: item }, `${index}.${i}`))
               .join('');
           }
         } else {
+          console.log('11: ', slot)
+          slot.props.slot.push({type: 'slotbtn', props: []})
           props[field.name] = slot.props[field.name]
-            .map((slot) => renderSlot(slot, items))
+            .map((slot, i) => renderSlot(slot, items, `${index}.${i}`))
             .join('');
         }
       } else {
+        console.log('13')
         props[field.name] = renderVariable(slot.props[field.name], items);
       }
     }
     if (component.raw !== false) {
-      return hbs.compile(`<div class  = ' u-component ' style = 'display:contents' >${component.template}</div>`)(props);
+      if(slot.type === 'slotbtn'){
+        return hbs.compile(component.template)(props);
+      }else{
+        return hbs.compile(`<div id = '${index}' class  = ' u-component ' style = 'display:contents' >${component.template}</div>`)(props);
+      }
+      console.log("slot:::", slot)
     } else {
-      return component.slot.map((x) => renderSlot(x, props)).join('');
+
+      return component.slot.map((x,i) => renderSlot(x, props, `${index}.${i}`)).join('');
     }
   }
 
-  const html = page.slot.map((slot) => renderSlot(slot, items)).join('');
+  const html = page.slot.map((slot, index) => renderSlot(slot, items, `${index}`)).join('');
   return { html };
 }
 

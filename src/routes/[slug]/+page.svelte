@@ -33,6 +33,7 @@
   import Editor from '$lib/components/Editor.svelte';
 
   export let data;
+  let selectedComponent
   let request: Partial<PageType> = data.page;
 
   //sets and syncs with slots store
@@ -187,42 +188,6 @@
     return items;
   }
 
-  /////
-  async function onAddSlot() {
-    console.log("onAddSlot");
-
-    if (componentId) {
-      const component = components.find((x) => x.id === componentId);
-      if (component) {
-        slotList = [...(slotList ?? []), { type: component.id, props: {} }];
-      } else {
-        console.log("component not found...");
-      }
-    } else {
-      const slot = await modal.open(SlotModal, {
-        components,
-        allowedComponents,
-        disabledComponents,
-        mode: "add",
-        slot: {
-          props: {},
-        },
-      });
-      if (slot) {
-        slotList = [...(slotList ?? []), slot];
-      }
-    }
-  }
-  async function onRemoveSlot(index: number) {
-    const choice = await confirmModal.open({
-      status: "danger",
-    });
-
-    if (choice) {
-      slotList.splice(index, 1);
-      slotList = slotList;
-    }
-  }
 </script>
 
 <svelte:head>
@@ -243,6 +208,7 @@
 
   <El row >
 	<El  col = 2 >
+    {#if !selectedComponent}
 		<Tabs   >
 		  <Card size = "sm">
 			<CardHeader >
@@ -339,10 +305,13 @@
 			</TabContent>
 		  </Card>
 		</Tabs>
+    {:else}
+    <El>this componentn is seleldted {selectedComponent}</El>
+    {/if}
 
 	</El>
 	<El col = 10  >
-    <Editor >
+     <Editor bind:page = {data.page} bind:selectedComponent>
     {#key JSON.stringify(data)}
 		  {#if data.page.dir === 'rtl' }
 			  <div style="display: contents;" dir='rtl'>
@@ -351,6 +320,9 @@
 			{:else }
 			  {@html data.html}
 			{/if}
+      <pre>
+      {JSON.stringify(data.page, null , 3)}
+    </pre>
     
 		  {/key}
       </Editor>
