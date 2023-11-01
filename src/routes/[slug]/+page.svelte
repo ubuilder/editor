@@ -33,7 +33,7 @@
   import Editor from '$lib/components/Editor.svelte';
 
   export let data;
-  let selectedComponent
+  let selectedComponent;
   let request: Partial<PageType> = data.page;
 
   //sets and syncs with slots store
@@ -187,19 +187,17 @@
 
     return items;
   }
-
 </script>
 
 <svelte:head>
-	{@html data.page.head ?? ''}
-	<title>{data.page.title}</title>
-	<meta name="description" content={data.page.description} />
+  {@html data.page.head ?? ''}
+  <title>{data.page.title}</title>
+  <meta name="description" content={data.page.description} />
 </svelte:head>
 
-
 <!-- <Page title="Update Page '{data.page.title}'"> -->
-  <!-- <El> -->
-  <!-- <ButtonList slot="header-buttons">
+<!-- <El> -->
+<!-- <ButtonList slot="header-buttons">
     <Button on:click={() => history.back()}>
       <Icon name="chevron-left" />
       Back
@@ -207,8 +205,8 @@
     <Button on:click={openPreviewModal} color="primary">Preview</Button>
   </ButtonList> -->
 
-  <!-- <El row > -->
-	<!-- <El  col = 2 >
+<!-- <El row > -->
+<!-- <El  col = 2 >
     {#if !selectedComponent}
 		<Tabs   >
 		  <Card size = "sm">
@@ -311,24 +309,21 @@
     {/if}
 
 	</El> -->
-	<!-- <El col = 10  > -->
-     <Editor bind:page = {data.page} bind:selectedComponent>
-    {#key JSON.stringify(data)}
-		  {#if data.page.dir === 'rtl' }
-			  <div style="display: contents;" dir='rtl'>
-				  {@html data.html}
-			  </div>
-			{:else }
-			  {@html data.html}
-			{/if}
-      <pre>
-      {JSON.stringify(data.page, null , 3)}
-    </pre>
-    
-		  {/key}
-      </Editor>
-	<!-- </El> -->
-  <!-- </El> -->
+<!-- <El col = 10  > -->
+<Editor bind:page={data.page} bind:selectedComponent>
+  {#key JSON.stringify(data)}
+    {#if data.page.dir === 'rtl'}
+      <div style="display: contents;" dir="rtl">
+        {@html data.html}
+      </div>
+    {:else}
+      {@html data.html}
+    {/if}
+  {/key}
+</Editor>
+
+<!-- </El> -->
+<!-- </El> -->
 <!-- </El> -->
 <!-- </Page> -->
 

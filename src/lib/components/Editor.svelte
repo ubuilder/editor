@@ -31,7 +31,7 @@
     })
 
 </script>
-<div bind:this = {editor} style = 'position:absolute;pointers-event:none;border: none; width: -moz-available'>
+<div bind:this = {editor} style = 'position:relative;pointers-event:none;border: none; width: -moz-available'>
     <slot />
     <WrapperProvider bind:selectedComponent bind:page bind:editor  bind:this = {wrapperProvider} bind:target = {targets[targets.length - 1]} />
 </div>

@@ -1,5 +1,7 @@
 <script lang="ts">
-  import { AlertProvider, El, ModalProvider } from '@ulibs/yesvelte';
+  import LeftBar from '$lib/components/LeftBar.svelte';
+  import RightBar from '$lib/components/RightBar.svelte';
+import { AlertProvider, El, ModalProvider } from '@ulibs/yesvelte';
   import { alert } from '@ulibs/yesvelte';
   import '@ulibs/yesvelte/styles.css';
   import tabler from 'yesvelte/css/tabler.min.css?url';
@@ -13,19 +15,19 @@
   <div>Ubuilder cms</div>
   <div class="center">
     <!--left sidebar -->
-    <div style="width: 100px">sidebar</div>
+    <LeftBar  />
     <!-- center -->
     <div style="position: relative; ">
       <slot />
     </div>
-
     <!-- right sidebar -->
-    <div style="width : 100px">this is rigwifiht sidebar</div>
+    <RightBar />
+    
   </div>
 </div>
 
-<!-- <ModalProvider /> -->
-<!-- <AlertProvider fixed alerts={$alert} /> -->
+<ModalProvider />
+<AlertProvider fixed alerts={$alert} />
 
 <style>
   .center {

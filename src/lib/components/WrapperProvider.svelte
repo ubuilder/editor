@@ -22,7 +22,7 @@
     const rect = target?.getBoundingClientRect();
     const computedStyle = window.getComputedStyle(editor);
 
-    x = rect.left - computedStyle?.left?.split('px')[0] + 0.2;
+    x = rect.left - computedStyle?.left?.split('px')[0] + 0.2;2
     y = rect.top - computedStyle?.top?.split('px')[0];
     w = rect.width;
     h = rect.height;
