@@ -196,18 +196,19 @@
 	<meta name="description" content={data.page.description} />
 </svelte:head>
 
+
 <!-- <Page title="Update Page '{data.page.title}'"> -->
   <!-- <El> -->
-  <ButtonList slot="header-buttons">
+  <!-- <ButtonList slot="header-buttons">
     <Button on:click={() => history.back()}>
       <Icon name="chevron-left" />
       Back
     </Button>
     <Button on:click={openPreviewModal} color="primary">Preview</Button>
-  </ButtonList>
+  </ButtonList> -->
 
-  <El row >
-	<El  col = 2 >
+  <!-- <El row > -->
+	<!-- <El  col = 2 >
     {#if !selectedComponent}
 		<Tabs   >
 		  <Card size = "sm">
@@ -276,7 +277,7 @@
 				</TabPanel>
 				<TabPanel>
 				  {#if data.forms.data.length}
-					<!-- <ListBox items={data.forms.data} let:item>
+					 <ListBox items={data.forms.data} let:item>
 									 <ListItem name="Form">{item.}</ListItem> 
 									<ListItem name="URL">{item.pathname}</ListItem>
 									<ListItem name="Content (JSON)">{JSON.stringify(item.data).slice(0, 50) + '...'}</ListItem>
@@ -285,7 +286,7 @@
 									<ListItem name="Actions">
 										<Button on:click={() => modal.open(FormViewer, {data: item.data})} color="primary" size="sm">View</Button>
 									</ListItem>
-								</ListBox> -->
+								</ListBox> 
 				  {:else}
 					<El style="height: 300px" d="flex" alignItems="center" justifyContent="center">
 					  There is no form submitted from this page!
@@ -309,8 +310,8 @@
     <El>this componentn is seleldted {selectedComponent}</El>
     {/if}
 
-	</El>
-	<El col = 10  >
+	</El> -->
+	<!-- <El col = 10  > -->
      <Editor bind:page = {data.page} bind:selectedComponent>
     {#key JSON.stringify(data)}
 		  {#if data.page.dir === 'rtl' }
@@ -326,8 +327,8 @@
     
 		  {/key}
       </Editor>
-	</El>
-  </El>
+	<!-- </El> -->
+  <!-- </El> -->
 <!-- </El> -->
 <!-- </Page> -->
 

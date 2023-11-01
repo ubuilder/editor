@@ -88,10 +88,9 @@
     let id = target.id.split('.')
     let selected = page.slot[id.shift()]
     for (let i of id){
-      selected = selected.props.slot[i]
+      selected = selected.pro2ps.slot[i]
     }
     selectedComponent = selected
-
   }
 </script>
 
