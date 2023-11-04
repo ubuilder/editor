@@ -321,6 +321,9 @@
     {/if}
   {/key}
 </Editor>
+<pre style = "top: 200px;position:relative">
+  {JSON.stringify(data.page, null, 3)}
+</pre>
 
 <!-- </El> -->
 <!-- </El> -->

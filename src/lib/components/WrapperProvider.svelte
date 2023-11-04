@@ -2,10 +2,12 @@
   import { confirmModal } from '@ulibs/yesvelte';
   import { Button, Icon } from 'yesvelte';
   export let target: HTMLElement;
+
+  $:console.log('target change: ', target)
   export let editor: HTMLElement;
 
   export let page;
-  export let selectedComponent
+  export let selectedComponent;
   // $:console.log('i got the slot: ', slot)
   let show = false;
   let x = 0;
@@ -22,8 +24,12 @@
     const rect = target?.getBoundingClientRect();
     const computedStyle = window.getComputedStyle(editor);
 
-    x = rect.left - computedStyle?.left?.split('px')[0] + 0.2;2
-    y = rect.top - computedStyle?.top?.split('px')[0];
+
+    // x = rect.left
+    // x = rect.left - computedStyle?.left?.split('px')[0] + 0.2;
+    x = rect.left - editor.getBoundingClientRect().left + 0.2;
+    y = rect.top - editor.getBoundingClientRect().top;
+    // y = rect.top
     w = rect.width;
     h = rect.height;
   }
@@ -65,8 +71,8 @@
     });
 
     if (choice) {
-      console.log('page: ', page)
-      console.log('choice')
+      console.log('page: ', page);
+      console.log('id', id);
       if (id.length == 1) {
         forDeleteParent.splice(id[0], 1);
       } else {
@@ -79,29 +85,65 @@
           forDeleteParent = forDeleteParent.props.slot[id[i]];
         }
       }
-      page = page
-      console.log('page: ', page)
-
+      page = page;
+      console.log('page: ', page);
     }
   }
-  function setSelectedComponent(){
-    let id = target.id.split('.')
-    let selected = page.slot[id.shift()]
-    for (let i of id){
-      selected = selected.pro2ps.slot[i]
+  function setSelectedComponent() {
+    console.log('selectedComponent: ', selectedComponent)
+    let id = target.id.split('.');
+    let parentId = id.slice(0, id.length -1)
+    let component = findComponent(page, id)
+    
+    // const parent = findComponent (page, parentId)
+
+    // parentId.pop()
+    //Todo 
+    // find element
+    // find the parent element
+    console.log('id: ', id)
+    console.log('parentID: ', parentId)
+    console.log('compoent: ', parent)
+    console.log('selectedComponent: ', selectedComponent)
+    // selectedComponent = {}
+
+  }
+  function findComponent(page, id){
+    if(id.length === 0){
+       selectedComponent = page.slot
+    }else if(id.length  === 1 ){
+       selectedComponent = page.slot[id[0]]
+    }else{
+      let s = page.slot[id[0]]
+      for(let i =  1; i < id.length ; i++){
+        s = s.props.slot[i]
+      }
+      selectedComponent = s
     }
-    selectedComponent = selected
   }
 </script>
 
 <div
   class="wrapper"
-  style="width:{w}px; height: {h}px; top: {y}px; left: {x}px; border: 1px solid green; position : absolute; pointer-events:none; display:{show
-    ? ''
-    : 'none'}"
-    on:click   = {setSelectedComponent}
+  style="width:{w}px; height: {h}px; top: {y}px; left: {x}px; display:{show ? '' : 'none'}"
+  on:click={setSelectedComponent}
 >
-  <div style="position:relative;pointer-events:all;display:flex;flex-wrap:nowrap ">
-    <Button size="sm" color="danger" on:click={onRemoveSlot}>Remove<Icon name="x" /></Button>
-  </div>
+  <!-- <div class="banner">component name</div> -->
+  
+
 </div>
+
+<style>
+  .wrapper {
+    border: 1px solid rgb(0, 21, 250);
+    position: absolute;
+    background: transparent;
+    /* pointer-events: none; */
+  }
+  .banner {
+    pointer-events: all;
+    position: relative;
+    z-index: -1;
+    transform: translateY(-100%);
+  }
+</style>
